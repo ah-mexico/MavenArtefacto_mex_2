@@ -1,0 +1,50 @@
+
+# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Java CI with Maven
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: paso1
+    - uses: actions/checkout@v3
+      with:
+        java-version: 1.8
+
+    - name: paso 2
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+
+    - name: paso 3
+      run:
+        mvn -Bpackage --file pom.xml
+        mkdir staging && cp target/*.jar staging
+    
+    - name: paso 4
+      uses: actions/checkout@v3
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hasfiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2
+      
+    - name: paso 5      
+      uses: actions/upload-artifact@v3
+      with: 
+        name: github-action-artifact
+        path: staging
