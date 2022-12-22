@@ -33,7 +33,7 @@ jobs:
 
     - name: paso 3
       run:
-        mvn -Bpackage --file pom.xml
+        mvn -B package --file pom.xml
         mkdir staging && cp target/*.jar staging
     
     - name: paso 4
